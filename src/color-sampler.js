@@ -1,5 +1,5 @@
 /*
- * color-sampler v0.1.0
+ * color-sampler v0.1.1
  * https://github.com/emn178/color-sampler
  *
  * Copyright 2015, emn178@gmail.com
@@ -12,10 +12,13 @@
 
   var KEY = 'color-sampler';
   var SELECTOR = ':' + KEY;
-  var IE7 = navigator.userAgent.indexOf('MSIE 7.0') != -1;
-  var BOUNDS = ['left', 'top', 'right', 'bottom'];
   var OFFSET_CSS = ['padding', 'border'];
-  var init = false, preview, previewPixels = [], previewing = false;
+  var init = false, preview, previewPixels = [], previewing = false,
+      interval = 200, timer, observations = $();
+
+  $.expr[':'][KEY] = function(element) {
+    return $(element).data(KEY) !== undefined;
+  };
 
   function Sampler(canvas, options) {
     this.canvas = $(canvas);
@@ -23,14 +26,14 @@
     this.options = options || {};
     this.enabled = true;
     this.context = canvas.getContext("2d");
-    this.bound();
+    this.resize();
 
     this.canvas.on('mousemove', this.onMousemove.bind(this));
     this.canvas.on('mouseout', this.onMouseout.bind(this));
     this.canvas.on('click', this.onClick.bind(this));
   }
 
-  Sampler.prototype.bound = function() {
+  Sampler.prototype.resize = function() {
     var canvas = this.canvas;
     var bounds = {left: 0, top: 0};
     OFFSET_CSS.forEach(function (css) {
@@ -46,10 +49,11 @@
     if(!this.enabled) {
       return;
     }
+    var canvas = this.canvas;
     var bounds = this.bounds;
     var x = e.offsetX - bounds.left;
     var y = e.offsetY - bounds.top;
-    if(x < 0 || y < 0 || x > bounds.right || y > bounds.bottom) {
+    if(x < 0 || y < 0 || x >= bounds.right || y >= bounds.bottom) {
       hidePreview();
       return;
     }
@@ -61,7 +65,7 @@
     showPreview();
     this.color = previewPixels[60].css('background-color');
     if($.isFunction(this.options.onPreview)) {
-      this.options.onPreview.call(this.canvas, this.color);
+      this.options.onPreview.call(canvas, this.color);
     }
   };
 
@@ -94,6 +98,12 @@
     }
   };
 
+  Sampler.prototype.detect = function() {
+    if(this.canvas.width() != this.bounds.right || this.canvas.height() != this.bounds.bottom) {
+      this.resize();
+    }
+  };
+
   Sampler.prototype.enable = function(enabled) {
     if(enabled === undefined) {
       enabled = true;
@@ -110,7 +120,7 @@
 
   function resize() {
     $(SELECTOR).each(function() {
-      $(this).data(KEY).bound();
+      $(this).data(KEY).resize();
     });
   }
 
@@ -146,32 +156,59 @@
     preview.removeClass('active');
   }
 
-  var PublicMethods = ['enable', 'disable'];
+  function detect() {
+    observations = observations.filter(SELECTOR);
+    observations.each(function() {
+      $(this).data(KEY).detect();
+    });
+    if(observations.length === 0) {
+      timer = clearInterval(timer);
+    }
+  }
+
+  var PublicMethods = ['enable', 'disable', 'resize'];
   $.fn.colorSampler = function (method, options) {
-    if(typeof(method) == 'string') {
-      if($.inArray(method, PublicMethods) != -1) {
-        this.filter('canvas').each(function () {
+    var isString = typeof(method) == 'string';
+    this.filter('canvas').each(function () {
+      if(isString) {
+        if($.inArray(method, PublicMethods) != -1) {
           var sampler = $(this).data(KEY);
           if(sampler) {
             sampler[method].apply(sampler, options);
           }
-        });
-      }
-    } else {
-      options = method;
-      this.filter('canvas').each(function () {
+        }
+      } else {
+        options = method;
         var sampler = new Sampler(this, options);
         $(this).data(KEY, sampler);
-      });
 
-      if(!init) {
-        init = true;
-        createPreview();
-        $(document).ready(function() {
-          $(window).bind('resize', resize);
-        });
+        if(!init) {
+          init = true;
+          createPreview();
+          $(document).ready(function() {
+            $(window).bind('resize', resize);
+          });
+        }
+
+        observations = observations.add(this);
+        if(interval && !timer) {
+          timer = setInterval(detect, interval);
+        }
       }
-    }
+    });
     return this;
+  };
+
+  $.colorSamper = {};
+
+  $.colorSamper.setInterval = function(v) {
+    if(v == interval || !$.isNumeric(v) || v < 0) {
+      return;
+    }
+    interval = v;
+    timer = clearInterval(timer);
+    if(interval > 0) {
+      timer = setInterval(detect, interval);
+    }
   };
 })(jQuery, window, document);

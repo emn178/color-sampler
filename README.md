@@ -43,10 +43,25 @@ Enable the color sampler function.
 
 Disable the color sampler function.
 
+#### resize()
+
+When timer is disabled, call this method to tell color sampler that canvas size change.
+
+#### $.colorSampler.setInterval(inverval)
+
+Set interval of timer that check canvas resize.
+
+##### *inverval: `Number` (default: `50`)*
+
+Interval of timer. Set 0 to disable timer, and you can use `resize()` to update manually.
+
 ## Example
 ```JavaScript
 $('#canvas').colorSampler('enable');
 $('#canvas').colorSampler('disable');
+$('#canvas').colorSampler('resize');
+// disable timer
+$.colorSampler.setInterval(0);
 ```
 
 ## License

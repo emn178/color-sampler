@@ -1,0 +1,11 @@
+{
+  "name": "color-sampler",
+  "version": "0.1.0",
+  "main": ["src/color-sampler.js"],
+  "ignore": [
+    "samples"
+  ],
+  "dependencies": {
+    "jquery": ">= 1.6"
+  }
+}

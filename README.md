@@ -2,8 +2,10 @@
 A jQuery plugin provides color sampler function for Canvas.
 
 ## Download
-[Compress](https://raw.github.com/emn178/color-sampler/master/build/color-sampler.min.js)  
-[Uncompress](https://raw.github.com/emn178/color-sampler/master/src/color-sampler.js)
+[Compress JS](https://raw.github.com/emn178/color-sampler/master/build/color-sampler.min.js)  
+[Compress CSS](https://raw.github.com/emn178/color-sampler/master/build/color-sampler.min.css)  
+[Uncompress JS](https://raw.github.com/emn178/color-sampler/master/src/color-sampler.js)  
+[Uncompress CSS](https://raw.github.com/emn178/color-sampler/master/src/color-sampler.css)
 
 ## Installation
 You can also install color-sampler by using Bower.

@@ -1,3 +1,7 @@
+# v0.1.2 / 2015-11-19
+
+IE Support.
+
 # v0.1.1 / 2015-11-15
 
 Create project

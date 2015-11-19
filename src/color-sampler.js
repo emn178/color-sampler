@@ -1,5 +1,5 @@
 /*
- * color-sampler v0.1.1
+ * color-sampler v0.1.2
  * https://github.com/emn178/color-sampler
  *
  * Copyright 2015, emn178@gmail.com
@@ -79,7 +79,7 @@
       if(x < 0 || y < 0) {
         previewPixels[j].css('background-color', 'white');
       } else {
-        var color = 'rgba(' + data.slice(i, i + 4).join(',') + ')';
+        var color = 'rgba(' + Array.prototype.slice.call(data, i, i + 4).join(',') + ')';
         previewPixels[j].css('background-color', color);
       }
     }

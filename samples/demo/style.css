@@ -43,7 +43,7 @@ body, html, h1, h2 {
 #canvas {
   padding: 10px;
   margin: 10px;
-  border: 10px solid;
+  border: 5px solid;
 }
 
 #colors {

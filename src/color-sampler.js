@@ -1,18 +1,17 @@
 /*!
- * color-sampler v0.1.3
- * https://github.com/emn178/color-sampler
+ * [color-sampler]{@link https://github.com/emn178/color-sampler}
  *
- * Copyright 2015, emn178@gmail.com
- *
- * @license under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * @version 0.1.4
+ * @author Chen, Yi-Cyuan [emn178@gmail.com]
+ * @copyright Chen, Yi-Cyuan 2015-2016
+ * @license MIT
  */
 (function ($, window, document) {
   'use strict';
 
   var KEY = 'color-sampler';
   var SELECTOR = ':' + KEY;
-  var OFFSET_CSS = ['padding', 'border'];
+  var INACCURACY = 5;
   var init = false, preview, previewPixels = [], previewing = false, interval = 200,
       timer, observations = $();
 
@@ -22,12 +21,10 @@
 
   function Sampler(canvas, options) {
     this.canvas = $(canvas);
-
     this.options = options || {};
     this.enabled = true;
     this.context = canvas.getContext("2d");
     this.resize();
-
     this.canvas.on('mousemove', this.onMousemove.bind(this));
     this.canvas.on('mouseout', this.onMouseout.bind(this));
     this.canvas.on('click', this.onClick.bind(this));
@@ -35,17 +32,12 @@
 
   Sampler.prototype.resize = function () {
     var canvas = this.canvas;
-    var bounds = {
-      left: 0,
-      top: 0
+    this.bounds = {
+      left: parseInt(canvas.css('padding-left')) || 0,
+      top: parseInt(canvas.css('padding-top')) || 0,
+      right: canvas.width(),
+      bottom: canvas.height()
     };
-    OFFSET_CSS.forEach(function (css) {
-      bounds.left += parseInt(canvas.css(css + '-left')) || 0;
-      bounds.top += parseInt(canvas.css(css + '-top')) || 0;
-    });
-    bounds.right = canvas.width();
-    bounds.bottom = canvas.height();
-    this.bounds = bounds;
   };
 
   Sampler.prototype.onMousemove = function (e) {
@@ -56,7 +48,8 @@
     var bounds = this.bounds;
     var x = e.offsetX - bounds.left;
     var y = e.offsetY - bounds.top;
-    if (x < 0 || y < 0 || x >= bounds.right || y >= bounds.bottom) {
+    this.inRange = x >= 0 && y >= 0 && x < bounds.right && y < bounds.bottom;
+    if (!this.inRange && (x < -INACCURACY || y < -INACCURACY || x >= bounds.right + INACCURACY || y >= bounds.bottom + INACCURACY)) {
       hidePreview();
       return;
     }
@@ -93,7 +86,7 @@
   };
 
   Sampler.prototype.onClick = function (e) {
-    if (!this.color || !this.enabled) {
+    if (!this.color || !this.enabled || !this.inRange) {
       return;
     }
     if ($.isFunction(this.options.onSelect)) {

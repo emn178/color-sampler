@@ -1,3 +1,7 @@
+# v0.1.5 / 2016-04-06
+
+* Added sampler:preview and sampler:select events.
+
 # v0.1.4 / 2016-03-21
 
 * Fixed incorrect cursor if border exists.

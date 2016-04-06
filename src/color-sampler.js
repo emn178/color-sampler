@@ -1,7 +1,7 @@
 /*!
  * [color-sampler]{@link https://github.com/emn178/color-sampler}
  *
- * @version 0.1.4
+ * @version 0.1.5
  * @author Chen, Yi-Cyuan [emn178@gmail.com]
  * @copyright Chen, Yi-Cyuan 2015-2016
  * @license MIT
@@ -63,6 +63,7 @@
     if ($.isFunction(this.options.onPreview)) {
       this.options.onPreview.call(canvas, this.color);
     }
+    this.canvas.trigger('sampler:preview', this.color);
   };
 
   Sampler.prototype.setupPreview = function (centralX, centralY) {
@@ -92,6 +93,7 @@
     if ($.isFunction(this.options.onSelect)) {
       this.options.onSelect.call(this.canvas, this.color);
     }
+    this.canvas.trigger('sampler:select', this.color);
   };
 
   Sampler.prototype.detect = function () {

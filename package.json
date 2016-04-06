@@ -1,6 +1,6 @@
 {
   "name": "color-sampler",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A jQuery plugin provides color sampler function for Canvas.",
   "main": "src/color-sampler.js",
   "devDependencies": {

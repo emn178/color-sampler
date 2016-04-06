@@ -27,13 +27,20 @@ JavaScript
 ```JavaScript
 $('#canvas').colorSampler({
   onPreview: function (color) {
-    // ...
+    // ... or sampler:preview event
   },
   onSelect: function (color) {
-    // ...
+    // ... or sampler:select event
   }
 });
 ```
+
+### Events
+#### sampler:preview
+Preview event.
+
+#### sampler:preview
+Select event.
 
 ### Methods
 
@@ -62,6 +69,12 @@ Interval of timer. Set 0 to disable timer, and you can use `resize()` to update 
 $('#canvas').colorSampler('enable');
 $('#canvas').colorSampler('disable');
 $('#canvas').colorSampler('resize');
+$('#canvas').bind('sampler:preview', function (e, color) {
+  // ...
+});
+$('#canvas').bind('sampler:select', function (e, color) {
+  // ...
+});
 // disable timer
 $.colorSampler.setInterval(0);
 ```

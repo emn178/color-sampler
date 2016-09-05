@@ -50,14 +50,6 @@ body, html, h1, h2 {
   text-align: center;
 }
 
-.color {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  border: 1px solid black;
-  vertical-align: middle;
-}
-
 .color-row {
   line-height: 32px;
   display: inline-block;
@@ -66,4 +58,18 @@ body, html, h1, h2 {
 .color-row span {
   vertical-align: middle;
   display: inline-block;
+}
+
+.color-wrapper {
+  display: inline-block;
+  width: 35px;
+  height: 30px;
+  border: 1px solid black;
+  vertical-align: middle;
+  text-indent: 100%;
+  background-image: url('data:image/gif;base64,R0lGODlhDAAMAIABAMzMzP///yH5BAEAAAEALAAAAAAMAAwAAAIWhB+ph5ps3IMyQFBvzVRq3zmfGC5QAQA7');
+}
+
+.color {
+  height: 100%;
 }

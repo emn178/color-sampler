@@ -15,6 +15,9 @@
   border: 1px solid;
   border-radius: 50%;
   overflow: hidden;
+  background-color: white;
+  background-image: url('data:image/gif;base64,R0lGODlhDAAMAIABAMzMzP///yH5BAEAAAEALAAAAAAMAAwAAAIWhB+ph5ps3IMyQFBvzVRq3zmfGC5QAQA7');
+  background-size: 6px;
 }
 
 .color-sampler-preview.active {

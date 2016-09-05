@@ -1,7 +1,7 @@
 /*!
  * [color-sampler]{@link https://github.com/emn178/color-sampler}
  *
- * @version 0.1.5
+ * @version 0.1.6
  * @author Chen, Yi-Cyuan [emn178@gmail.com]
  * @copyright Chen, Yi-Cyuan 2015-2016
  * @license MIT
@@ -48,7 +48,7 @@
     var bounds = this.bounds;
     var x = e.offsetX - bounds.left;
     var y = e.offsetY - bounds.top;
-    this.inRange = x >= 0 && y >= 0 && x < bounds.right && y < bounds.bottom;
+    this.inRange = this.checkInRange(x, y);
     if (!this.inRange && (x < -INACCURACY || y < -INACCURACY || x >= bounds.right + INACCURACY || y >= bounds.bottom + INACCURACY)) {
       hidePreview();
       return;
@@ -73,13 +73,19 @@
     for (var i = 0, j = 0; i < data.length; i += 4, ++j) {
       var y = parseInt(j / 11) + startY;
       var x = j % 11 + startX;
-      if (x < 0 || y < 0) {
+      if (!this.checkInRange(x, y)) {
         previewPixels[j].css('background-color', 'white');
       } else {
-        var color = 'rgba(' + Array.prototype.slice.call(data, i, i + 4).join(',') + ')';
+        var color = Array.prototype.slice.call(data, i, i + 4);
+        color[3] = Math.min(color[3] / 100, 1);
+        color = 'rgba(' + color.join(',') + ')';
         previewPixels[j].css('background-color', color);
       }
     }
+  };
+
+  Sampler.prototype.checkInRange = function (x, y) {
+    return x >= 0 && y >= 0 && x < this.bounds.right && y < this.bounds.bottom;
   };
 
   Sampler.prototype.onMouseout = function () {
